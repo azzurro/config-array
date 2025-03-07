@@ -294,11 +294,6 @@ function normalizeSync(items, context, extraConfigTypes) {
  */
 function shouldIgnorePath(ignores, filePath, relativeFilePath) {
 
-	// all files outside of the basePath are ignored
-	if (relativeFilePath.startsWith('..')) {
-		return true;
-	}
-
 	return ignores.reduce((ignored, matcher) => {
 
 		if (!ignored) {
@@ -372,12 +367,14 @@ function pathMatches(filePath, basePath, config) {
 	 * file path.
 	 */
 	const relativeFilePath = path.relative(basePath, filePath);
+	const filePathToMatch = relativeFilePath.startsWith('..') ?
+		filePath : relativeFilePath;
 
 	// match both strings and functions
 	const match = pattern => {
 
 		if (isString(pattern)) {
-			return doMatch(relativeFilePath, pattern);
+			return doMatch(filePathToMatch, pattern);
 		}
 
 		if (typeof pattern === 'function') {
@@ -954,10 +951,6 @@ export class ConfigArray extends Array {
 
 		const relativeDirectoryPath = path.relative(this.basePath, directoryPath)
 			.replace(/\\/g, '/');
-
-		if (relativeDirectoryPath.startsWith('..')) {
-			return true;
-		}
 
 		// first check the cache
 		const cache = dataCache.get(this).directoryMatches;

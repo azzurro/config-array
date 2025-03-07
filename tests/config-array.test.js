@@ -991,10 +991,10 @@ describe('ConfigArray', () => {
 				expect(configs.isIgnored(filename)).to.be.false;
 			});
 
-			it('should return true when passed JS filename in parent directory', () => {
+			it('should return false when passed JS filename in parent directory', () => {
 				const filename = path.resolve(basePath, '../foo.js');
 
-				expect(configs.isIgnored(filename)).to.be.true;
+				expect(configs.isIgnored(filename)).to.be.false;
 			});
 
 			it('should return false when passed HTML filename', () => {
@@ -1111,10 +1111,10 @@ describe('ConfigArray', () => {
 				expect(configs.isFileIgnored(filename)).to.be.false;
 			});
 
-			it('should return true when passed JS filename in parent directory', () => {
+			it('should return false when passed JS filename in parent directory', () => {
 				const filename = path.resolve(basePath, '../foo.js');
 
-				expect(configs.isFileIgnored(filename)).to.be.true;
+				expect(configs.isFileIgnored(filename)).to.be.false;
 			});
 
 			it('should return false when passed HTML filename', () => {
@@ -1841,7 +1841,7 @@ describe('ConfigArray', () => {
 				}).throws(/normalized/);
 			});
 
-			it('should return true when the directory is outside of the basePath', () => {
+			it('should return false when the directory is outside of the basePath', () => {
 				configs = new ConfigArray([
 					{
 						ignores: ['foo/bar']
@@ -1852,7 +1852,7 @@ describe('ConfigArray', () => {
 
 				configs.normalizeSync();
 
-				expect(configs.isDirectoryIgnored(path.resolve(basePath, '../foo/bar'))).to.be.true;
+				expect(configs.isDirectoryIgnored(path.resolve(basePath, '../foo/bar'))).to.be.false;
 			});
 
 			it('should return true when the parent directory of a directory is ignored', () => {
